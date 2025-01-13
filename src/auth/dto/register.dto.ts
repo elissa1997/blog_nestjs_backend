@@ -1,5 +1,5 @@
-import { IsInt, IsNotEmpty } from 'class-validator';
-import { IsNotExists } from '../../common/rules/is-not-exists.rules';
+import { IsNotEmpty } from 'class-validator';
+import { IsNotExists } from '@/common/rules/is-not-exists.rules';
 export default class RegisterDto {
     // 用户名
     @IsNotEmpty({ message: '用户名不能为空' })
