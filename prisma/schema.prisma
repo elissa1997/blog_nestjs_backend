@@ -34,7 +34,7 @@ model comment {
   a_id      Int
   parent_id Int       @default(0)
   is_regist Int       @default(0)
-  user_name String?
+  user_name String    @default("unknow")
   email     String    @default("unknow")
   url       String?
   ip        String    @default("127.0.0.1")

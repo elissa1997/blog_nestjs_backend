@@ -18,8 +18,7 @@ export class ArticleService {
         category: dto.category,
         status: dto.status,
       }
-    })
-    ;
+    });
   }
 
   async findAll(dto: findAllDto) {
