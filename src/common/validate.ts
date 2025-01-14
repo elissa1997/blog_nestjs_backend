@@ -2,15 +2,15 @@ import { HttpException, HttpStatus, ValidationError, ValidationPipe } from "@nes
 
 export default class Validate extends ValidationPipe {
   protected flattenValidationErrors(validationErrors: ValidationError[]): string[] {
-    const messages = {};
+    const msg = {};
     validationErrors.forEach((error) => {
-      messages[error.property] = Object.values(error.constraints)[0];
+      msg[error.property] = Object.values(error.constraints)[0];
     });
-    console.log(messages);
+    console.log(msg);
     throw new HttpException(
       {
         code: 422,
-        messages,
+        msg,
       },
       HttpStatus.UNPROCESSABLE_ENTITY,
     )
