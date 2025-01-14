@@ -18,7 +18,7 @@ export function IsNotExists(table: string, validationOptions?: ValidationOptions
             },
           })
           return !Boolean(res)
-        },
+        }
       },
     })
   }
