@@ -1,6 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Req, Query, ParseIntPipe } from '@nestjs/common';
 import { CommentService } from './comment.service';
 import addDto from './dto/add.dto';
+import findAllDto from './dto/findall.dto';
+import deleteDto from './dto/delete.dto';
+import updateDto from './dto/update.dto';
 
 @Controller('comment')
 export class CommentController {
@@ -19,23 +22,32 @@ export class CommentController {
     return this.commentService.create(dto);
   }
 
-  @Get()
-  findAll() {
-    return this.commentService.findAll();
+  @Get('list')
+  findAll(
+    @Query() dto: findAllDto,
+    @Query('offset', ParseIntPipe) offset: number,
+    @Query('limits', ParseIntPipe) limits: number
+  ) {
+    dto.offset = offset;
+    dto.limits = limits;
+    return this.commentService.findAll(dto);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.commentService.findOne(+id);
+  @Get('detail')
+  findOne() {
+    return "无此接口";
   }
 
   @Post('update')
-  update(@Body() dto: any) {
-    // return this.commentService.update(+id, updateCommentDto);
+  update(@Body() dto: updateDto) {
+    return this.commentService.update(dto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.commentService.remove(+id);
+
+  @Post('delete')
+  remove(
+    @Body() dto: deleteDto
+  ) {
+    return this.commentService.remove(dto);
   }
 }

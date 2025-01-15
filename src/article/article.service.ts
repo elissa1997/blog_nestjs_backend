@@ -44,7 +44,23 @@ export class ArticleService {
       where: where,
       skip: (dto.offset - 1) * dto.limits,
       take: dto.limits,
-    })
+      include: {
+        _count: {
+          select: {
+            comments: true,
+          },
+        },
+      },
+
+    }).then(articles => {
+      return articles.map(article => {
+        return {
+          ...article,
+          commentNum: article._count.comments,
+          _count: undefined, // 删除 _count 属性
+        };
+      });
+    });
 
     return {
       rows: articles,
@@ -56,7 +72,10 @@ export class ArticleService {
     return this.prisma.article.findUnique({
       where: {
         id: dto.a_id,
-      }
+      },
+      include: {
+        comments: true,
+      },
     })
     ;
   }

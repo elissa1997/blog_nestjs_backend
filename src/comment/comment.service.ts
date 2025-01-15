@@ -4,8 +4,10 @@ import { HttpService } from '@nestjs/axios';
 import * as crypto from "crypto";
 import { lastValueFrom } from 'rxjs';
 import { PrismaService } from '@/prisma/prisma.service';
-import { UpdateCommentDto } from './dto/update-comment.dto';
 import addDto from './dto/add.dto';
+import findAllDto from './dto/findall.dto';
+import deleteDto from './dto/delete.dto';
+import updateDto from './dto/update.dto';
 
 @Injectable()
 export class CommentService {
@@ -45,20 +47,72 @@ export class CommentService {
 
   }
 
-  findAll() {
-    return `This action returns all comment`;
+  async findAll(dto: findAllDto) {
+    let where = {};
+    
+    if (dto.search) {
+      let searchObj = JSON.parse(dto.search);
+      Object.keys(searchObj).forEach(key => {
+        switch (key) {
+          case 'status':
+            where['status'] = searchObj[key];
+            break;
+          case 'content':
+            where['text'] = { contains: searchObj[key] };
+            break;
+          case 'articleTitle':
+            where['article'] = { title: { contains: searchObj[key] } };
+            break;
+          // 可以在这里添加更多的键名处理
+        }
+      });
+      
+    }
+
+    const comments = await this.prisma.comment.findMany({
+      where,
+      skip: (dto.offset - 1) * dto.limits,
+      take: dto.limits,
+      include: {
+        article: {
+          select: {
+            id: true,
+            title: true,
+            status: true,
+          },
+        },
+      },
+    });
+
+    return {
+      rows: comments,
+      count: await this.prisma.comment.count({ where: where }),
+    }
   }
 
   findOne(id: number) {
     return `This action returns a #${id} comment`;
   }
 
-  update(id: number, updateCommentDto: UpdateCommentDto) {
-    return `This action updates a #${id} comment`;
+  update(dto: updateDto) {
+    return this.prisma.comment.update({
+      where: {
+        id: dto.id,
+      },
+      data: {
+        status: dto.status,
+      }
+    })
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} comment`;
+  remove(dto: deleteDto) {
+    return this.prisma.comment.deleteMany({
+      where: {
+        id: {
+          in: dto.id,
+        },
+      },
+    });
   }
 
   // 评论发送至七牛内容审核接口
