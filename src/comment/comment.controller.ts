@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Body, Req, Query, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Req, Query, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { CommentService } from './comment.service';
 import addDto from './dto/add.dto';
 import findAllDto from './dto/findall.dto';
 import deleteDto from './dto/delete.dto';
 import updateDto from './dto/update.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('comment')
 export class CommentController {
@@ -23,6 +24,7 @@ export class CommentController {
   }
 
   @Get('list')
+  @UseGuards(AuthGuard('jwt'))
   findAll(
     @Query() dto: findAllDto,
     @Query('offset', ParseIntPipe) offset: number,
@@ -39,12 +41,14 @@ export class CommentController {
   }
 
   @Post('update')
+  @UseGuards(AuthGuard('jwt'))
   update(@Body() dto: updateDto) {
     return this.commentService.update(dto);
   }
 
 
   @Post('delete')
+  @UseGuards(AuthGuard('jwt'))
   remove(
     @Body() dto: deleteDto
   ) {

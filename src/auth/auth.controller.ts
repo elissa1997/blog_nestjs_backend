@@ -1,7 +1,8 @@
-import { Body, Controller, ParseIntPipe, Post } from '@nestjs/common';
+import { Body, Controller, ParseIntPipe, Post, Get, UseGuards, Request } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import RegisterDto from './dto/register.dto';
 import LoginDto from './dto/login.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('auth')
 export class AuthController {
@@ -19,5 +20,13 @@ export class AuthController {
   @Post('login')
   login(@Body() dto: LoginDto) {
     return this.auth.login(dto);
+  }
+
+  // 获取用户信息
+  @Get('info')
+  @UseGuards(AuthGuard('jwt'))
+  userInfo(@Request() req) {
+    delete req.user.password;
+    return req.user;
   }
 }

@@ -38,6 +38,16 @@ export class AuthService {
     return this.token(user);
   }
 
+  async userInfo() {
+    console.log()
+    // const user = await this.prisma.user.findUnique({
+    //   where: {
+    //     id: sub,
+    //   }
+    // })
+    // return user;
+  }
+
   private async token({id, name}) {
     return {
       token: await this.jwt.signAsync(
