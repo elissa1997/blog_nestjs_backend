@@ -21,7 +21,7 @@ export default class addDto {
   // 新增属性
   ip: string;
 
-  agant: string;
+  agent: string;
 
   @IsNotEmpty({ message: '评论内容不能为空' })
   text: string;

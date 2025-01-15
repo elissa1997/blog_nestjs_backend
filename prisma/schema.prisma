@@ -38,7 +38,7 @@ model comment {
   email     String    @default("unknow")
   url       String?
   ip        String    @default("127.0.0.1")
-  agant     String    @default("unknow")
+  agent     String    @default("unknow")
   text      String?
   status    Int       @default(0)
   createdAt DateTime  @default(now())

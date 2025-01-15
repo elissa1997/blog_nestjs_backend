@@ -29,7 +29,7 @@ export class CommentService {
             email: dto.email,
             url: dto.url,
             ip: dto.ip,
-            agant: dto.agant,
+            agent: dto.agent,
             text: dto.text,
             status: dto.status,
           }
