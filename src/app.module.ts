@@ -9,6 +9,7 @@ import { ConfigModule } from '@nestjs/config';
   imports: [AuthModule, PrismaModule, ArticleModule, CommentModule,
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: [`.env.${process.env.NODE_ENV}`, '.env'],
     })
   ],
   controllers: [],
