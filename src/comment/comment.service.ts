@@ -18,7 +18,6 @@ export class CommentService {
   ) {}
   async create(dto: addDto) {
     let investigate = await this.sendCommentToQiniu(dto.text);
-    console.log(investigate);
     if (investigate.code === 200 && investigate.result.suggestion === 'pass') {
         return this.prisma.comment.create({
           data: {
