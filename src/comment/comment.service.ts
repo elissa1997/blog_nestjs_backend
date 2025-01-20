@@ -1,9 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { HttpService } from '@nestjs/axios';
-import * as crypto from "crypto";
-import { lastValueFrom } from 'rxjs';
 import { PrismaService } from '@/prisma/prisma.service';
+import { QiniuInvestigate } from '@/qiniu/qiniu.investigate';
 import addDto from './dto/add.dto';
 import findAllDto from './dto/findall.dto';
 import deleteDto from './dto/delete.dto';
@@ -13,11 +10,10 @@ import updateDto from './dto/update.dto';
 export class CommentService {
   constructor(
     private prisma: PrismaService,
-    private config: ConfigService,
-    private httpService: HttpService,
+    private qiniuInvestigate: QiniuInvestigate,
   ) {}
   async create(dto: addDto) {
-    let investigate = await this.sendCommentToQiniu(dto.text);
+    let investigate = await this.qiniuInvestigate.sendCommentToQiniu(dto.text);
     if (investigate.code === 200 && investigate.result.suggestion === 'pass') {
         return this.prisma.comment.create({
           data: {
@@ -89,9 +85,9 @@ export class CommentService {
     }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} comment`;
-  }
+  // findOne(id: number) {
+  //   return `This action returns a #${id} comment`;
+  // }
 
   update(dto: updateDto) {
     return this.prisma.comment.update({
@@ -112,53 +108,5 @@ export class CommentService {
         },
       },
     });
-  }
-
-  // 评论发送至七牛内容审核接口
-  async sendCommentToQiniu(commentText: string) {
-    let host = 'ai.qiniuapi.com';
-    let path = '/v3/text/censor';
-    let body = {
-      data: {
-        text: commentText,
-      },
-      params: {
-        scenes: [
-          "antispam"
-        ]
-      }
-    };
-    let method = 'POST';
-    let token = await this.getQiniuToken(host, path, JSON.stringify(body), method);
-    const result = this.httpService.request({
-      method: method,
-      url: `https://${host}${path}`,
-      headers: {
-        'Authorization': token,
-        'Content-Type': 'application/json',
-      },
-      data: body,
-    })
-    const checkResult: any = await lastValueFrom(result);
-    return checkResult.data;
-  }
-
-
-    // 七牛生成鉴权接口
-  async getQiniuToken(host: string, path: string, body: Object, method: string) {
-
-    let access = undefined;
-    access = method.toUpperCase() + ' ' + path;
-    access += '\nHost: ' + host;
-    access += '\nContent-Type: application/json';
-    access += '\n\n';
-    access += body;
-    let hmac = crypto.createHmac('sha1', this.config.get('QINIU_SECRET_KEY'));
-    hmac.update(access);
-    let digest = hmac.digest('base64');
-
-  
-    let safeDigest = digest.replace(/\//g, '_').replace(/\+/g, '-');
-    return 'Qiniu ' + this.config.get('QINIU_ACCESS_KEY') + ':' + safeDigest;
   }
 }
