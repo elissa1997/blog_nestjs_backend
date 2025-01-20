@@ -61,3 +61,12 @@ model otherComment {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 }
+
+model dict {
+  id        Int       @id @default(autoincrement())
+  dict_type String    @default("unknow")
+  name      String    @default("unknow")
+  value     Int       @default(0)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}

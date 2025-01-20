@@ -5,6 +5,7 @@ import { ArticleModule } from './article/article.module';
 import { CommentModule } from './comment/comment.module';
 import { ConfigModule } from '@nestjs/config';
 import { OtherCommentModule } from './otherComment/otherComment.module';
+import { DictModule } from './dict/dict.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { OtherCommentModule } from './otherComment/otherComment.module';
       envFilePath: [process.env.NODE_ENV === 'production' ? '.env.production' : '.env.development'],
     }),
     OtherCommentModule,
+    DictModule,
   ],
   controllers: [],
   providers: [],
