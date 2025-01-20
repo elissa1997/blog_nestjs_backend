@@ -7,7 +7,7 @@ import updateDto from './dto/update.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { FindByTypeDto } from './dto/findByType.dto';
 
-@Controller('other-comment')
+@Controller('othercomment')
 export class OtherCommentController {
   constructor(private readonly otherCommentService: OtherCommentService) {}
 
