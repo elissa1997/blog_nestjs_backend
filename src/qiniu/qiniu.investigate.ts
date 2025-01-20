@@ -1,5 +1,5 @@
 // src/common/services/qiniu.service.ts
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { HttpService } from '@nestjs/axios';
 import * as crypto from "crypto";
