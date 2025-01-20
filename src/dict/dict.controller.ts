@@ -12,6 +12,7 @@ export class DictController {
   constructor(private readonly dictService: DictService) {}
 
   @Post('add')
+  @UseGuards(AuthGuard('jwt'))
   create(@Body() dto: addDto) {
     return this.dictService.create(dto);
   }
