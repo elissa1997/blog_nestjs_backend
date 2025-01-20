@@ -4,13 +4,19 @@ import { PrismaModule } from './prisma/prisma.module';
 import { ArticleModule } from './article/article.module';
 import { CommentModule } from './comment/comment.module';
 import { ConfigModule } from '@nestjs/config';
+import { OtherCommentModule } from './otherComment/otherComment.module';
 
 @Module({
-  imports: [AuthModule, PrismaModule, ArticleModule, CommentModule,
+  imports: [
+    AuthModule,
+    PrismaModule,
+    ArticleModule,
+    CommentModule,
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: [`.env.${process.env.NODE_ENV}`, '.env'],
-    })
+      envFilePath: [process.env.NODE_ENV === 'production' ? '.env.production' : '.env.development'],
+    }),
+    OtherCommentModule,
   ],
   controllers: [],
   providers: [],
