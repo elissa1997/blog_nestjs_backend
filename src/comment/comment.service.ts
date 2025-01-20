@@ -47,6 +47,7 @@ export class CommentService {
     
     if (dto.search) {
       let searchObj = JSON.parse(dto.search);
+      console.log(searchObj);
       Object.keys(searchObj).forEach(key => {
         switch (key) {
           case 'status':

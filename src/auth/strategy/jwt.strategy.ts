@@ -2,7 +2,7 @@ import { PrismaService } from "@/prisma/prisma.service";
 import { ConfigService } from "@nestjs/config";
 import { ExtractJwt, Strategy } from "passport-jwt";
 import { PassportStrategy } from "@nestjs/passport";
-import { Injectable } from "@nestjs/common";
+import { Injectable, UnauthorizedException } from "@nestjs/common";
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
@@ -14,10 +14,14 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   }
 
   async validate({sub: id}) {
-    return await this.prisma.user.findUnique({
-      where: {
-        id,
-      },
-    })
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+    });
+
+    if (!user) {
+      throw new UnauthorizedException();  // 这里抛出标准的 UnauthorizedException
+    }
+
+    return user;
   }
 }

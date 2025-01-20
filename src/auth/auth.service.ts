@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import RegisterDto from './dto/register.dto';
 import LoginDto from './dto/login.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -32,7 +32,13 @@ export class AuthService {
       }
     })
     if(!(await verify(user.password, dto.password))) {
-      throw new BadRequestException('密码输入错误')
+      throw new HttpException(
+        {
+          code: 401,
+          msg: '密码错误',
+        },
+        HttpStatus.UNAUTHORIZED,
+      );
     }
 
     return this.token(user);
