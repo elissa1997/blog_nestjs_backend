@@ -1,6 +1,6 @@
 import { IsNotEmpty } from 'class-validator';
 
-export class addDto {
+export default class addDto {
   @IsNotEmpty({ message: '字典类型不能为空' })
   dict_type: string;
 

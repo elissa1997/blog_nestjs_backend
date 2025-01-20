@@ -4,8 +4,8 @@ import addDto from './dto/add.dto';
 import findAllDto from './dto/findall.dto';
 import deleteDto from './dto/delete.dto';
 import updateDto from './dto/update.dto';
+import FindByTypeDto from './dto/findByType.dto';
 import { AuthGuard } from '@nestjs/passport';
-import { FindByTypeDto } from './dto/findByType.dto';
 
 @Controller('othercomment')
 export class OtherCommentController {

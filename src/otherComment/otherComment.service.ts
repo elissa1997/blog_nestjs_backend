@@ -5,7 +5,7 @@ import addDto from './dto/add.dto';
 import findAllDto from './dto/findall.dto';
 import deleteDto from './dto/delete.dto';
 import updateDto from './dto/update.dto';
-import { FindByTypeDto } from './dto/findByType.dto';
+import FindByTypeDto from './dto/findByType.dto';
 
 @Injectable()
 export class OtherCommentService {

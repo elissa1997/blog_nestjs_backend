@@ -1,9 +1,11 @@
 import { Controller, Get, Post, Body, Query, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { DictService } from './dict.service';
-import { addDto } from './dto/add.dto';
-import { findAllDto } from './dto/findall.dto';
-import { updateDto } from './dto/update.dto';
 import { AuthGuard } from '@nestjs/passport';
+import addDto from './dto/add.dto';
+import findAllDto from './dto/findall.dto';
+import updateDto from './dto/update.dto';
+import deleteDto from './dto/delete.dto';
+import FindByTypeDto from './dto/findByType.dto';
 
 @Controller('dict')
 export class DictController {
@@ -23,8 +25,15 @@ export class DictController {
   }
 
   @Get('detail')
-  findOne(@Query('id', ParseIntPipe) id: number) {
-    return this.dictService.findOne(id);
+  findOne() {
+    return "无此接口";
+  }
+
+  @Get('findbytype')
+  fundByType(
+    @Query() dto: FindByTypeDto,
+  ) {
+    return this.dictService.findByType(dto);
   }
 
   @Post('update')
@@ -36,8 +45,8 @@ export class DictController {
   @Post('delete')
   @UseGuards(AuthGuard('jwt'))
   remove(
-    @Query('id', ParseIntPipe) id: number
+    @Body() dto: deleteDto
   ) {
-    return this.dictService.remove(id);
+    return this.dictService.remove(dto);
   }
 }
