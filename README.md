@@ -7,7 +7,7 @@
 使用nestjs编写的博客后端程序，系统架构如下
 
 <p align="center">
-  <img src="https://cdn.makedream.site/doc/img/blog_nest_backend_architecture.png" width="90%" alt="Nest Logo"  />
+  <img src="https://cdn.makedream.site/doc/img/blog_nest_backend_architecture.png?" width="90%" alt="Nest Logo" />
 </p>
 
 # 项目运行
