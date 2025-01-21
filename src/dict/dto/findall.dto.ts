@@ -7,5 +7,5 @@ export default class findAllDto {
   @IsNotEmpty({ message: '每页数量不能为空' })
   limits: number;
 
-  dict_type: string;
+  search: string;
 }

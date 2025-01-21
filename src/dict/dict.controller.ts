@@ -21,7 +21,11 @@ export class DictController {
   @UseGuards(AuthGuard('jwt'))
   findAll(
     @Query() dto: findAllDto,
+    @Query('offset', ParseIntPipe) offset: number,
+    @Query('limits', ParseIntPipe) limits: number
   ) {
+    dto.offset = offset;
+    dto.limits = limits;
     return this.dictService.findAll(dto);
   }
 

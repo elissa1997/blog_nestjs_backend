@@ -51,19 +51,20 @@ export class OtherCommentService {
         switch (key) {
           case 'status':
             where['status'] = searchObj[key];
-            break;
-          case 'content':
+          break;
+          case 'text':
             where['text'] = { contains: searchObj[key] };
-            break;
-
+          break;
+              
           case 'type':
             where['type'] = searchObj[key];
-            break;
-          // 可以在这里添加更多的键名处理
+          break;
+              // 可以在这里添加更多的键名处理
         }
       });
     }
-
+          
+    console.log(where);
     const comments = await this.prisma.otherComment.findMany({
       where,
       skip: (dto.offset - 1) * dto.limits,

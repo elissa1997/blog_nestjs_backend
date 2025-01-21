@@ -23,28 +23,51 @@ export class DictService {
   async findAll(dto: findAllDto) {
     let where = {};
 
-    if (dto.dict_type) {
-      where['dict_type'] = dto.dict_type;
+
+    if (dto.search) {
+      let searchObj = JSON.parse(dto.search);
+      console.log(searchObj);
+      Object.keys(searchObj).forEach(key => {
+        switch (key) {
+          case 'dict_type':
+            where['dict_type'] = { contains: searchObj[key] };
+            break;
+          // 可以在这里添加更多的键名处理
+        }
+      });
+      
     }
 
     const dicts = await this.prisma.dict.findMany({
       where,
+      skip: (dto.offset - 1) * dto.limits,
+      take: dto.limits,
     });
 
-    return dicts;
+    return {
+      rows: dicts,
+      count: await this.prisma.dict.count({ where: where }),
+    }
   }
 
 
-  findByType(dto: FindByTypeDto){
-    return this.prisma.dict.findMany({
-      where: {
-        dict_type: dto.dict_type,
-      },
+  async findByType(dto: FindByTypeDto){
+    const where = {
+      dict_type: {contains: dto.dict_type},
+    };
+
+    const dicts = await this.prisma.dict.findMany({
+      where
     });
+
+    return {
+      rows: dicts,
+      count: await this.prisma.dict.count({ where: where }),
+    }
   }
 
   async update(dto: updateDto) {
-    if (dto.dict_type && !dto.id) {
+    if (dto.update_dict_type) {
       // 更新所有匹配 dict_type 的记录
       return this.prisma.dict.updateMany({
         where: {
