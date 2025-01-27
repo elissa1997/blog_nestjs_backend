@@ -14,6 +14,7 @@ export class DictService {
     return this.prisma.dict.create({
       data: {
         dict_type: dto.dict_type,
+        dict_type_name: dto.dict_type_name,
         name: dto.name,
         value: dto.value,
       },
@@ -30,8 +31,12 @@ export class DictService {
       Object.keys(searchObj).forEach(key => {
         switch (key) {
           case 'dict_type':
-            where['dict_type'] = { contains: searchObj[key] };
-            break;
+            where['dict_type'] = searchObj[key];
+          break;
+
+          case 'dict_type_name':
+            where['dict_type_name'] = { contains: searchObj[key] };
+          break;
           // 可以在这里添加更多的键名处理
         }
       });
@@ -53,7 +58,7 @@ export class DictService {
 
   async findByType(dto: FindByTypeDto){
     const where = {
-      dict_type: {contains: dto.dict_type},
+      dict_type: dto.dict_type,
     };
 
     const dicts = await this.prisma.dict.findMany({
@@ -75,6 +80,7 @@ export class DictService {
         },
         data: {
           dict_type: dto.update_dict_type,
+          dict_type_name: dto.update_dict_type_name,
         },
       });
     } else {
@@ -84,7 +90,8 @@ export class DictService {
           id: dto.id,
         },
         data: {
-          dict_type: dto.dict_type,
+          dict_type: dto.update_dict_type,
+          dict_type_name: dto.update_dict_type_name,
           name: dto.name,
           value: dto.value,
         },
