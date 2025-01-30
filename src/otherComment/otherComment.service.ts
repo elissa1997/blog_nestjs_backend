@@ -67,6 +67,9 @@ export class OtherCommentService {
     console.log(where);
     const comments = await this.prisma.otherComment.findMany({
       where,
+      orderBy: {
+        createdAt: 'desc',
+      },
       skip: (dto.offset - 1) * dto.limits,
       take: dto.limits,
     });
@@ -81,12 +84,20 @@ export class OtherCommentService {
   //   return `This action returns a #${id} otherComment`;
   // }
 
-  findByType(dto: FindByTypeDto){
-    return this.prisma.otherComment.findMany({
+  async findByType(dto: FindByTypeDto){
+    const comments = await this.prisma.otherComment.findMany({
       where: {
         type: dto.type,
       },
+      orderBy: {
+        createdAt: 'desc',
+      }
     });
+
+    return {
+      rows: comments,
+      count: await this.prisma.otherComment.count( {where: {type: dto.type}}),
+    }
   }
 
   update(dto: updateDto) {

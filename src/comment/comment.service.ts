@@ -67,6 +67,9 @@ export class CommentService {
 
     const comments = await this.prisma.comment.findMany({
       where,
+      orderBy: {
+        createdAt: 'desc',
+      },
       skip: (dto.offset - 1) * dto.limits,
       take: dto.limits,
       include: {

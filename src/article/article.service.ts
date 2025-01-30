@@ -42,6 +42,9 @@ export class ArticleService {
     
     const articles = await this.prisma.article.findMany({
       where: where,
+      orderBy: {
+        createdAt: 'desc',
+      },
       skip: (dto.offset - 1) * dto.limits,
       take: dto.limits,
       include: {
@@ -74,7 +77,11 @@ export class ArticleService {
         id: dto.a_id,
       },
       include: {
-        comments: true,
+        comments: {
+          orderBy: {
+            createdAt: 'desc',
+          },
+        },
       },
     })
     ;
