@@ -40,7 +40,8 @@ $ npm run prisma:dev
 5. 安装依赖，执行 `npm install`
 6. 打包最终产物，执行 `npm run prisma:prod`
 7. 导入数据到数据库(如果有存量数据)
-8. 编写启动脚本 pm2start.json
+8. 启动项目，执行 `npm run build`
+9. 编写启动脚本 pm2start.json
 
     ```json
     {
@@ -58,7 +59,7 @@ $ npm run prisma:dev
     }
     ```
 
-9. pm2运行，执行 `pm2 start pm2start.json`
+10. pm2运行，执行 `pm2 start pm2start.json`
 
 ## License
 

@@ -1,0 +1,13 @@
+{
+  "apps": [
+    {
+      "name": "blog_nest_backend",
+      "script": "dist/main.js",
+      "autorestart": true,
+      "watch": false,
+      "env": {
+        "NODE_ENV": "production"
+      }
+    }
+  ]
+}
